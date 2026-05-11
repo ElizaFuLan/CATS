@@ -51,7 +51,7 @@ set_seed(0)
 accelerator = Accelerator(mixed_precision='fp16',
                           gradient_accumulation_steps=train_config["gradient_accumulation_steps"])
 
-from kangaroo.adapter import AdapterModel
+from cats.adapter import AdapterModel
 
 from typing import Any, Dict, List
 
@@ -71,11 +71,10 @@ baseconfig = AutoConfig.from_pretrained(args.basepath)
 
 head = torch.nn.Linear(baseconfig.hidden_size, baseconfig.vocab_size, bias=False)
 
-# 使用AutoModel来加载模型，然后提取lm_head权重
 print("Loading model to extract lm_head weights...")
 temp_model = AutoModelForCausalLM.from_pretrained(args.basepath, torch_dtype=torch.float16, device_map="cpu")
 tensor = temp_model.lm_head.weight.data.float()
-# 释放临时模型内存
+
 del temp_model
 torch.cuda.empty_cache()
 
@@ -168,8 +167,6 @@ class DataCollatorWithPadding:
             [item['loss_mask'] + [0] * (max_length - len(item['loss_mask'])) for item in features])
         batch_attention_mask = torch.tensor(
             [item['attention_mask'] + [0] * (max_length - len(item['attention_mask'])) for item in features])
-        # batch_loss_mask = torch.ones_like(batch_loss_mask)
-        # batch_attention_mask=torch.ones_like(batch_attention_mask)
         batch = {
             "input_ids": batch_input_ids,
             "hidden_states": batch_hidden_states,
@@ -182,7 +179,6 @@ class DataCollatorWithPadding:
 
 
 def top_accuracy(output, target, topk=(1,)):
-    # output.shape (bs, num_classes), target.shape (bs, )
     """Computes the accuracy over the k top predictions for the specified values of k"""
     with torch.no_grad():
         maxk = max(topk)
@@ -202,9 +198,6 @@ def top_accuracy(output, target, topk=(1,)):
 datapath = list_files(train_config["datapath"])
 traindatapath = datapath[:int(len(datapath) * 0.95)]
 testdatapath = datapath[int(len(datapath) * 0.95):]
-# print('td',train_config["datapath"])
-# print(datapath)
-# exit()
 traindataset = CustomDataset(traindatapath, transform=None)
 testdataset = CustomDataset(testdatapath)
 train_loader = DataLoader(traindataset, batch_size=train_config["bs"], shuffle=True,

@@ -2,7 +2,6 @@ import argparse
 from tqdm import tqdm
 import sys
 
-# 强制立即刷新输出
 sys.stdout.flush()
 sys.stderr.flush()
 
@@ -51,7 +50,7 @@ def longest_common_prefix(list1, list2):
 def build_dataset_rank(
         tokenizer, split="train",
         select=None,
-        data_path = "/blue/sun.jingwei/yuninghan/Yuning_Han/Kangaroo/cache/CKPT/ShareGPT_V4.3_unfiltered_cleaned_split.json"
+        data_path = "your_path/ShareGPT_V4.3_unfiltered_cleaned_split.json"
 ):
     print(f"[INFO] Loading dataset from {data_path}...", flush=True)
     print("[INFO] This may take 5-10 minutes for the first time...", flush=True)
@@ -66,8 +65,7 @@ def build_dataset_rank(
     print(f"[INFO] Selected samples from {args.start} to {args.end}", flush=True)
     
     original_columns1 = ds1.column_names
-    # 改为单进程，避免死锁
-    num_proc = 1  # ← 修改这里！从4改为1
+    num_proc = 1
     
     print("[INFO] Starting data preprocessing...", flush=True)
 
@@ -135,7 +133,7 @@ def build_dataset_rank(
     ds1 = ds1.map(
         preprocess_function,
         batched=True,
-        num_proc=num_proc,  # 使用单进程
+        num_proc=num_proc,
         remove_columns=original_columns1,
         load_from_cache_file=False
     )
