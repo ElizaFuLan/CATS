@@ -133,4 +133,4 @@ The metrics JSON includes mean accepted tokens per step, mean SV-accepted tokens
 
 - `EarlyExitLlamaForCausalLM.forward_draft_or_large_model` ([cats/earlyexit.py](cats/earlyexit.py)) — single forward routine reused for draft, shallow, and target passes. Supports chunked execution over arbitrary `[start_layer, end_layer)` ranges with shared `past_key_values`.
 - `AdapterModel` ([cats/adapter.py](cats/adapter.py)) — a 1-layer Llama decoder block plus optional residual/norm; loaded from each adapter directory's `config.json` + `pytorch_model.bin`.
-- `MultiAdapterCATSModel` ([evaluation/CATS_dynamic.py](evaluation/CATS_dynamic.py)) — loads the base model once and binds both draft and shallow adapters; `cats_forward_hybrid_evaluation` is the per-question decoding loop registered with `run_eval`.
+- `MultiAdapterCATSModel` ([evaluation/CATS_dynamic.py](evaluation/CATS_dynamic.py)) — loads the base model once and binds both draft and shallow adapters; `cats_forward_hybrid_evaluation` is the per-question decoding loop registered with `run_eval`.  
