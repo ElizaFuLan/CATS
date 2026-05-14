@@ -1,10 +1,31 @@
+<div align="center">
+
 # CATS: Cascaded Adaptive Tree Speculation for Memory-Limited LLM Inference Acceleration
 
-![CATS overview](main_figure.png)
+[![Paper](https://img.shields.io/badge/Paper-arXiv%3A2605.11186-b31b1b.svg)](https://arxiv.org/abs/2605.11186)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+</div>
 
 Official implementation of **CATS** — a cascaded, adaptive tree-based speculative decoding scheme designed for memory-limited LLM inference. A small *draft adapter* attached to an early exit of the base LLM proposes a dynamic tree of candidate tokens; a *shallow adapter* at a deeper exit performs cheap verification; tokens that survive are confirmed by the full target model. The cascade preserves the target distribution while reducing target-model forward passes.
 
 This repository contains the model definitions, training pipeline (data generation + adapter fine-tuning), and the evaluation entry point used in the paper.
+
+## Overview
+
+**CATS** is a self-speculative decoding framework for accelerating LLM inference on memory-limited devices. It performs cascaded verification and correction guided by the device's memory budget and parameter offloading patterns, maximizing token acceptance rate and end-to-end speedup while keeping the peak memory footprint equal to that of the target model alone — without the auxiliary draft model that existing speculative decoding methods assume HBM can hold.
+
+<div align="center">
+<img src="figures/main_figure.png" width="80%" alt="CATS overview"/>
+</div>
+
+Evaluated on multiple models across five benchmarks on real edge devices, CATS achieves a wall-clock speedup of up to **5.08×** with no degradation in generation quality, outperforming the SOTA method by up to **1.45×** under edge memory constraints.
+
+<div align="center">
+<img src="figures/main_result.png" width="40%" alt="CATS main results on Vicuna-7B"/>
+<br/>
+<em>Radar chart of results on Vicuna-7B across the five benchmarks.</em>
+</div>
 
 ## Acknowledgements
 
