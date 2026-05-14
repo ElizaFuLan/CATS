@@ -27,10 +27,6 @@ Evaluated on multiple models across five benchmarks on real edge devices, CATS a
 <em>Radar chart of results on Vicuna-7B across the five benchmarks.</em>
 </div>
 
-## Acknowledgements
-
-This code is based on [Kangaroo](https://github.com/Equationliu/Kangaroo). We thank the authors for releasing their implementation.
-
 ## Requirements
 
 Tested versions (see `requirements.txt`):
@@ -154,4 +150,21 @@ The metrics JSON includes mean accepted tokens per step, mean SV-accepted tokens
 
 - `EarlyExitLlamaForCausalLM.forward_draft_or_large_model` ([cats/earlyexit.py](cats/earlyexit.py)) — single forward routine reused for draft, shallow, and target passes. Supports chunked execution over arbitrary `[start_layer, end_layer)` ranges with shared `past_key_values`.
 - `AdapterModel` ([cats/adapter.py](cats/adapter.py)) — a 1-layer Llama decoder block plus optional residual/norm; loaded from each adapter directory's `config.json` + `pytorch_model.bin`.
-- `MultiAdapterCATSModel` ([evaluation/CATS_dynamic.py](evaluation/CATS_dynamic.py)) — loads the base model once and binds both draft and shallow adapters; `cats_forward_hybrid_evaluation` is the per-question decoding loop registered with `run_eval`.  
+- `MultiAdapterCATSModel` ([evaluation/CATS_dynamic.py](evaluation/CATS_dynamic.py)) — loads the base model once and binds both draft and shallow adapters; `cats_forward_hybrid_evaluation` is the per-question decoding loop registered with `run_eval`.
+
+## Citation
+
+If you find this project useful, please cite:
+
+```bibtex
+@article{cats2026han,
+  title  = {CATS: Cascaded Adaptive Tree Speculation for Memory-Limited LLM Inference Acceleration},
+  author = {Han, Yuning and Jin, Yangchenchen and Zhao, Dylan and Sun, Jingwei},
+  year   = {2026},
+  journal= {arXiv preprint arXiv:2605.11186},
+}
+```
+
+## Acknowledgements
+
+This code is based on [Kangaroo](https://github.com/Equationliu/Kangaroo). We thank the authors for releasing their implementation.
